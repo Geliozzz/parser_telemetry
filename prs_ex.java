@@ -1,5 +1,10 @@
 
-
+/* @autor  dasdas
+*
+* @param source Путь к файлу телеметрии
+*
+*
+* */
 
 import java.io.*;
 import java.util.ArrayList;
@@ -8,7 +13,8 @@ import java.util.ArrayList;
 
 public class prs_ex {
 
-    private static final String source = "D:\\Java\\52\\";
+    private static final String source = "D:\\Java\\54\\";
+
 
     public static void main(String[] args) throws IOException {
 
@@ -111,8 +117,11 @@ public class prs_ex {
         }
         reader_time.close();
 
+        int gray = 0;
+        int save = 0;
+        double time2 = 0;
+        double calc = 0;
         for (int i = 0; i < list1.size(); i++) {
-            int gray = 0;
             try {
                 int grk1 = (int) Double.parseDouble(list1.get(i));
                 int grk2 = (int) Double.parseDouble(list2.get(i));
@@ -130,17 +139,27 @@ public class prs_ex {
             }
 
             try {
+                if (gray != save) {
+                    save = gray;
+                    double time1 = Double.parseDouble(list_time.get(i));
+                    if (time1 != time2)
+                    {
+                        calc = 1 / ((time1 - time2) * 16);
+                    }
+                    time2 = time1;
+                }
+                    writer_frk.write(String.valueOf(calc) + "\r\n");
 
             }catch (NumberFormatException e){
                 writer_frk.write("0" + "\r\n");
                 e.printStackTrace();
             }catch (ArrayIndexOutOfBoundsException e){
-                writer_grk.write("0" + "\r\n");
+                writer_frk.write("0" + "\r\n");
                 e.printStackTrace();
             }
         }
         writer_grk.close();
-        writer_grk.close();
+        writer_frk.close();
     }
 
 
