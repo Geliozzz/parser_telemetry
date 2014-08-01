@@ -1,18 +1,16 @@
 
-/* @autor  dasdas
-*
-* @param source Путь к файлу телеметрии
-*
-*
-* */
+
 
 import java.io.*;
 import java.util.ArrayList;
 
-
-
+/**
+ * @author  Oleg Pocheptsov
+ *
+ */
 public class prs_ex {
 
+   /* source directory source file */
     private static final String source = "D:\\Java\\54\\";
 
 
@@ -53,6 +51,15 @@ public class prs_ex {
 
     }
 
+    /**
+     * <tt>Calc signal from DUS</tt>.
+     *
+     * @param first  high byte
+     * @param second low byte
+     * @return degree per second
+     */
+
+
     public static String calc(String first, String second) {
         double st = 0;
         double ml = 0;
@@ -73,6 +80,16 @@ public class prs_ex {
         }
         return String.valueOf(val);
     }
+
+    /**
+     * <tt>function receive files names and writes two files gyroscope signal and speed change gyroscope signal</tt>.
+     *
+     * @param file1 first bit gyrocode
+     * @param file2 second bit gyrocode
+     * @param file3 third bit gyrocode
+     * @param file4 fourth bit gyrocode
+     * @param time  global time telemetry
+     */
 
     public static void parseGray(String file1, String file2, String file3, String file4, String time) throws IOException {
 
@@ -132,28 +149,27 @@ public class prs_ex {
                 writer_grk.write(fi + "\r\n");
             } catch (NumberFormatException e) {
                 writer_grk.write("0" + "\r\n");
-               // e.printStackTrace();
+                // e.printStackTrace();
             } catch (ArrayIndexOutOfBoundsException e) {
                 writer_grk.write("0" + "\r\n");
-              //  e.printStackTrace();
+                //  e.printStackTrace();
             }
 
             try {
                 if (gray != save) {
                     save = gray;
                     double time1 = Double.parseDouble(list_time.get(i));
-                    if (time1 != time2)
-                    {
+                    if (time1 != time2) {
                         calc = 1 / ((time1 - time2) * 16);
                     }
                     time2 = time1;
                 }
-                    writer_frk.write(String.valueOf(calc) + "\r\n");
+                writer_frk.write(String.valueOf(calc) + "\r\n");
 
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 writer_frk.write("0" + "\r\n");
                 e.printStackTrace();
-            }catch (ArrayIndexOutOfBoundsException e){
+            } catch (ArrayIndexOutOfBoundsException e) {
                 writer_frk.write("0" + "\r\n");
                 e.printStackTrace();
             }
@@ -162,7 +178,11 @@ public class prs_ex {
         writer_frk.close();
     }
 
-
+    /**
+     * <tt>function use non standard gray code</tt>.
+     * @param x gray code
+     * @return  degree
+     */
     public static String gray2bin(int x) {
         switch (x) {
             case 15:
@@ -219,6 +239,10 @@ public class prs_ex {
         }
     }
 
+    /**
+     * <tt>function read need file and write new file with normal signal from dus</tt>.
+     * @param fileName file with non normal signal from dus
+     */
     public static void dus(String fileName) throws IOException {
         BufferedReader reader_dus = new BufferedReader(new FileReader(source + fileName + ".txt"));
         BufferedWriter writer_dus = new BufferedWriter(new FileWriter(source + "New - " + fileName + ".txt"));
